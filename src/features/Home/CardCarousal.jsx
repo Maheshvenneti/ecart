@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import CardComponent from "../../components/Card";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useApiGet from "../../hooks/useApiGet";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -27,22 +26,10 @@ function SamplePrevArrow(props) {
 }
 
 const CardCarousal = () => {
-  const [cardsData, setCardsData] = useState([]);
   const url = "https://dummyjson.com/products/category/smartphones";
-  const navigate = useNavigate()
+  const { data: cardsData, loading } = useApiGet(url);
+  const navigate = useNavigate();
 
-  const getAllCards = async () => {
-    try {
-      const response = await axios.get(url);
-      setCardsData(response.data.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAllCards();
-  }, []);
   const settings = {
     dots: true,
     infinite: true,
@@ -53,19 +40,29 @@ const CardCarousal = () => {
     prevArrow: <SamplePrevArrow />,
   };
 
-  const handleNavigate = ()=>{
-    navigate("/product-detail")
-  }
+  const handleNavigate = () => {
+    navigate("/product-detail");
+  };
 
   return (
-    <div className="container mt-5 mb-5">
-      <h3 style={{ textAlign: "left" }}>Grab the best deals on smartphones</h3>
-      <Slider {...settings}>
-        {cardsData.map((item) => {
-          return <CardComponent data={item} onClick={handleNavigate} />;
-        })}
-      </Slider>
-    </div>
+    <>
+      {loading ? (
+        <h2>loading...</h2>
+      ) : (
+        <div className="container mt-5 mb-5">
+          <h3 style={{ textAlign: "left" }}>
+            Grab the best deals on smartphones
+          </h3>
+          {cardsData && (
+            <Slider {...settings}>
+              {cardsData.products.map((item) => {
+                return <CardComponent data={item} onClick={handleNavigate} />;
+              })}
+            </Slider>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

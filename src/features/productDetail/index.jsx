@@ -1,32 +1,27 @@
-import React,{useEffect, useState} from 'react'
-import axios from "axios";
-import FirstSection from './FirstSection'
-import ReviewSection from './ReviewSection'
-
+import FirstSection from "./FirstSection";
+import ReviewSection from "./ReviewSection";
+import useApiGet from "../../hooks/useApiGet";
 
 const Index = () => {
-
-  const [productData, setProductData] = useState({});
   const url = "https://dummyjson.com/products/1";
+  const { data: productData, loading } = useApiGet(url);
 
-  const productReview = async () => {
-    try {
-      const response = await axios.get(url);
-      setProductData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    productReview();
-  }, []);
   return (
     <div>
-        <FirstSection/>
-        <ReviewSection reviews={productData?.reviews}/>
+      {loading ? (
+        <h2>loading...</h2>
+      ) : (
+        <>
+          {productData && (
+            <>
+              <FirstSection />
+              <ReviewSection reviews={productData?.reviews} />
+            </>
+          )}
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

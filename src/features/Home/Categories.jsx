@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
+import useApiGet from "../../hooks/useApiGet";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -26,21 +25,9 @@ function SamplePrevArrow(props) {
 }
 
 function SimpleSlider() {
-  const [categoriesData, setCategoriesData] = useState([]);
   const url = "https://dummyjson.com/products/category-list";
 
-  const getAllCategories = async () => {
-    try {
-      const response = await axios.get(url);
-      setCategoriesData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAllCategories();
-  }, []);
+  const { data: categoriesData, loading } = useApiGet(url);
 
   const settings = {
     dots: true,
@@ -52,14 +39,22 @@ function SimpleSlider() {
     prevArrow: <SamplePrevArrow />,
   };
   return (
-    <div className="container mt-5 mb-5">
-      <h3 style={{ textAlign: "center" }}>Top Categories</h3>
-      <Slider {...settings}>
-        {categoriesData.map((item) => {
-          return <Button variant="primary">{item}</Button>;
-        })}
-      </Slider>
-    </div>
+    <>
+      {loading ? (
+        <h2>loading...</h2>
+      ) : (
+        <div className="container mt-5 mb-5">
+          <h3 style={{ textAlign: "center" }}>Top Categories</h3>
+          {categoriesData && (
+            <Slider {...settings}>
+              {categoriesData.map((item) => {
+                return <Button variant="primary">{item}</Button>;
+              })}
+            </Slider>
+          )}
+        </div>
+      )}
+    </>
   );
 }
 
