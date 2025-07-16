@@ -7,12 +7,29 @@ const ProductIndex = () => {
   const url = "https://dummyjson.com/products";
   const { data, loading } = useApiGet(url);
   const [productData, setProductData] = useState([]);
+  const [sortOrder, setSortOrder] = useState("all");
+  const [selectedCata, setSelectedCata] = useState([])
+
 
   useEffect(() => {
-    if (data && data.products) {
-      setProductData(data.products);
+    if (sortOrder === "all") {
+      if (data && data.products) {
+        setProductData(data.products);
+      }
+    } else if (sortOrder === "lowtohigh") {
+      if (data && data.products) {
+        let sortedData = [...data.products].sort((a, b) => a.price - b.price);
+        setProductData(sortedData);
+      }
+    } else if (sortOrder === "hightolow") {
+      if (data && data.products) {
+        let sortedData = [...data.products].sort((a, b) => b.price - a.price);
+        setProductData(sortedData);
+      }
     }
-  }, [data]);
+
+    console.log("selected cata", selectedCata)
+  }, [data, sortOrder, selectedCata]);
 
   return (
     <>
@@ -23,7 +40,10 @@ const ProductIndex = () => {
           ) : (
             data && (
               <div className="row main-content ml-md-0">
-                <ItemLeftFilterSection />
+                <ItemLeftFilterSection
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                />
                 <AllProducts allProducts={productData} />
               </div>
             )

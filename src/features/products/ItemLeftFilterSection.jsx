@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-
-const ItemLeftFilterSection = () => {
-  const [sortOrder, setSortOrder] = useState("all");
-
+const ItemLeftFilterSection = ({ sortOrder, setSortOrder }) => {
   const handleChange = (value) => {
     setSortOrder(value);
   };
