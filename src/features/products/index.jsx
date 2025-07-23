@@ -11,7 +11,6 @@ const ProductIndex = () => {
   const [productData, setProductData] = useState([]);
   const [sortOrder, setSortOrder] = useState("all");
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [testingContext, setTestingContext] = useState("hello");
 
   useEffect(() => {
     let filteredData = [];
@@ -38,7 +37,16 @@ const ProductIndex = () => {
   }, [data, sortOrder, selectedCategories]);
 
   return (
-    <Store.Provider value={{ testingContext, setTestingContext }}>
+    <Store.Provider
+      value={{
+        selectedCategories,
+        setSelectedCategories,
+        sortOrder,
+        setSortOrder,
+        productData,
+        setProductData,
+      }}
+    >
       <div className="search-section">
         <div className="container-fluid container-xl">
           {loading ? (
@@ -46,13 +54,8 @@ const ProductIndex = () => {
           ) : (
             data && (
               <div className="row main-content ml-md-0">
-                <ItemLeftFilterSection
-                  sortOrder={sortOrder}
-                  setSortOrder={setSortOrder}
-                  selectedCategories={selectedCategories}
-                  setSelectedCategories={setSelectedCategories}
-                />
-                <AllProducts allProducts={productData} />
+                <ItemLeftFilterSection />
+                <AllProducts />
               </div>
             )
           )}

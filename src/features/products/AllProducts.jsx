@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Store } from "./index";
 
-const AllProducts = ({ allProducts }) => {
+const AllProducts = () => {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
+  const { productData } = useContext(Store);
 
   const handleNavigate = (id) => {
     navigate(`/product-details/${id}`);
   };
 
-  const filterProducts = allProducts.filter(
+  const filterProducts = productData.filter(
     (item) =>
-      (item.title && item.title.toLowerCase().includes(searchInput.toLowerCase())) ||
-      (item.brand && item.brand.toLowerCase().includes(searchInput.toLowerCase()))
+      (item.title &&
+        item.title.toLowerCase().includes(searchInput.toLowerCase())) ||
+      (item.brand &&
+        item.brand.toLowerCase().includes(searchInput.toLowerCase()))
   );
-
 
   return (
     <>

@@ -1,4 +1,8 @@
-const CategoriesList = ({ setSelectedCategories, selectedCategories }) => {
+import React, {useContext} from "react";
+import { Store } from "./index";
+
+const CategoriesList = () => {
+  const { setSelectedCategories } = useContext(Store);
   const categories = [
     "beauty",
     "fragrances",

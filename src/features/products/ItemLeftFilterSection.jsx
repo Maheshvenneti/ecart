@@ -1,11 +1,10 @@
+import React, { useContext } from "react";
+import { Store } from "./index";
 import CategoriesList from "./Catagories";
 
-const ItemLeftFilterSection = ({
-  sortOrder,
-  setSortOrder,
-  selectedCategories,
-  setSelectedCategories,
-}) => {
+const ItemLeftFilterSection = () => {
+  const { sortOrder, setSortOrder } = useContext(Store);
+
   const handleChange = (value) => {
     setSortOrder(value);
   };
@@ -70,10 +69,7 @@ const ItemLeftFilterSection = ({
                 </label>
               </div>
 
-              <CategoriesList
-                selectedCategories={selectedCategories}
-                setSelectedCategories={setSelectedCategories}
-              />
+              <CategoriesList />
 
               <h2 className="font-xbold body-font border-bottom filter-title">
                 Price Range
