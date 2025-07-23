@@ -1,38 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import ItemLeftFilterSection from "./ItemLeftFilterSection";
 import AllProducts from "./AllProducts";
 import useApiGet from "../../hooks/useApiGet";
+
+export const Store = createContext();
 
 const ProductIndex = () => {
   const url = "https://dummyjson.com/products";
   const { data, loading } = useApiGet(url);
   const [productData, setProductData] = useState([]);
   const [sortOrder, setSortOrder] = useState("all");
-  const [selectedCata, setSelectedCata] = useState([])
-
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [testingContext, setTestingContext] = useState("hello");
 
   useEffect(() => {
-    if (sortOrder === "all") {
-      if (data && data.products) {
-        setProductData(data.products);
-      }
-    } else if (sortOrder === "lowtohigh") {
-      if (data && data.products) {
-        let sortedData = [...data.products].sort((a, b) => a.price - b.price);
-        setProductData(sortedData);
-      }
-    } else if (sortOrder === "hightolow") {
-      if (data && data.products) {
-        let sortedData = [...data.products].sort((a, b) => b.price - a.price);
-        setProductData(sortedData);
-      }
-    }
+    let filteredData = [];
+    if (data && data.products) {
+      filteredData = [...data.products]; //copy
 
-    console.log("selected cata", selectedCata)
-  }, [data, sortOrder, selectedCata]);
+      //sorting
+      if (sortOrder === "lowtohigh") {
+        filteredData.sort((a, b) => a.price - b.price);
+      } else if (sortOrder === "hightolow") {
+        filteredData.sort((a, b) => b.price - a.price);
+      }
+
+      //check box filter
+
+      if (selectedCategories.length > 0) {
+        filteredData = filteredData.filter((item) =>
+          selectedCategories.includes(item.category)
+        );
+      }
+
+      setProductData(filteredData);
+    }
+  }, [data, sortOrder, selectedCategories]);
 
   return (
-    <>
+    <Store.Provider value={{ testingContext, setTestingContext }}>
       <div className="search-section">
         <div className="container-fluid container-xl">
           {loading ? (
@@ -43,6 +49,8 @@ const ProductIndex = () => {
                 <ItemLeftFilterSection
                   sortOrder={sortOrder}
                   setSortOrder={setSortOrder}
+                  selectedCategories={selectedCategories}
+                  setSelectedCategories={setSelectedCategories}
                 />
                 <AllProducts allProducts={productData} />
               </div>
@@ -50,7 +58,7 @@ const ProductIndex = () => {
           )}
         </div>
       </div>
-    </>
+    </Store.Provider>
   );
 };
 

@@ -1,8 +1,14 @@
-const ItemLeftFilterSection = ({ sortOrder, setSortOrder }) => {
+import CategoriesList from "./Catagories";
+
+const ItemLeftFilterSection = ({
+  sortOrder,
+  setSortOrder,
+  selectedCategories,
+  setSelectedCategories,
+}) => {
   const handleChange = (value) => {
     setSortOrder(value);
   };
-
   return (
     <>
       <div className="sidebar col-md-3 px-0">
@@ -64,39 +70,10 @@ const ItemLeftFilterSection = ({ sortOrder, setSortOrder }) => {
                 </label>
               </div>
 
-              <h2 className="font-xbold body-font border-bottom filter-title">
-                Cuisines
-              </h2>
-              <div className="mb-3 filter-options">
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Chinese</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Italian</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Mexican</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Thai</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Gujarati</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">Panjabi</label>
-                </div>
-                <div className="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" className="custom-control-input" />
-                  <label className="custom-control-label">South Indian</label>
-                </div>
-              </div>
+              <CategoriesList
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
 
               <h2 className="font-xbold body-font border-bottom filter-title">
                 Price Range

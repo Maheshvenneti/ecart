@@ -1,21 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 const AllProducts = ({ allProducts }) => {
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
 
   const handleNavigate = (id) => {
     navigate(`/product-details/${id}`);
   };
 
+  const filterProducts = allProducts.filter(
+    (item) =>
+      (item.title && item.title.toLowerCase().includes(searchInput.toLowerCase())) ||
+      (item.brand && item.brand.toLowerCase().includes(searchInput.toLowerCase()))
+  );
+
+
   return (
     <>
       <div className="content col-md-9">
         <div className="d-flex justify-content-between border-bottom align-items-center">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
           <h2 className="title">Products</h2>
         </div>
         <div className="row">
           <div className="vertical">
-            {allProducts.map((item) => {
+            {filterProducts.map((item) => {
               return (
                 <div
                   class="card dark"
