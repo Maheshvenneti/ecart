@@ -4,14 +4,8 @@ import { useState, useEffect } from "react";
 
 function ColorSchemesExample() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
-  const data = sessionStorage.getItem("userData");
-
-  useEffect(() => {
-    if (data) {
-      setUserData(data);
-    }
-  }, [data]);
+  const data = JSON.parse(sessionStorage.getItem("userData"));
+  const [userData, setUserData] = useState(data);
 
   const handleLogout = () => {
     sessionStorage.removeItem("userData");
